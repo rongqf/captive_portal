@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Cookie测试页面{% endblock %}
+
+{% block header_title %}Cookie设置和发送测试{% endblock %}
+{% block header_subtitle %}测试Cookie的存储和发送功能{% endblock %}
+
+{% block extra_head %}
+<style>
+    .test-btn {
+        padding: 10px 20px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px;
+    }
+    
+    .test-btn:hover {
+        background: #0056b3;
+    }
+    
+    pre {
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 4px;
+        overflow-x: auto;
+        font-size: 14px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="info-box">
+        <h3>当前Cookie状态</h3>
+        <div id="current-cookies">加载中...</div>
+    </div>
+    
+    <div class="info-box">
+        <h3>测试步骤</h3>
+        <ol>
+            <li>点击"访问登录页面"设置cookie</li>
+            <li>检查"当前Cookie状态"是否显示session_id</li>
+            <li>点击"发送认证请求"测试cookie是否被发送</li>
+        </ol>
+    </div>
+    
+    <div style="text-align: center; margin: 20px 0;">
+        <button class="test-btn" onclick="visitLoginPage()">访问登录页面</button>
+        <button class="test-btn" onclick="sendAuthRequest()">发送认证请求</button>
+        <button class="test-btn" onclick="clearCookies()">清除Cookie</button>
+    </div>
+    
+    <div class="info-box">
+        <h3>服务器响应</h3>
+        <div id="server-response">等待请求...</div>
+    </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // 显示当前cookie
+    function displayCookies() {
+        const cookies = document.cookie;
+        document.getElementById('current-cookies').innerHTML = 
+            cookies ? `<pre>${cookies}</pre>` : '没有cookie';
+    }
+    
+    // 访问登录页面设置cookie
+    async function visitLoginPage() {
+        document.getElementById('server-response').innerHTML = '正在访问登录页面...';
+        
+        try {
+            const response = await fetch('/auth/wifidogx/login/?gw_address=192.168.1.1&gw_port=2060&gw_id=test_gw');
+            const html = await response.text();
+            
+            // 检查响应头中的set-cookie
+            const setCookieHeader = response.headers.get('set-cookie');
+            document.getElementById('server-response').innerHTML = 
+                `登录页面访问成功<br>Set-Cookie头: ${setCookieHeader || '无'}`;
+            
+            // 更新当前cookie状态
+            setTimeout(displayCookies, 100);
+            
+        } catch (error) {
+            document.getElementById('server-response').innerHTML = 
+                `访问失败: ${error.message}`;
+        }
+    }
+    
+    // 发送认证请求测试cookie
+    async function sendAuthRequest() {
+        document.getElementById('server-response').innerHTML = '正在发送认证请求...';
+        
+        try {
+            const response = await fetch('/auth/wifidogx/auth/?token=test123&stage=login');
+            const result = await response.text();
+            
+            document.getElementById('server-response').innerHTML = 
+                `认证响应: ${result}`;
+            
+        } catch (error) {
+            document.getElementById('server-response').innerHTML = 
+                `请求失败: ${error.message}`;
+        }
+    }
+    
+    // 清除cookie
+    function clearCookies() {
+        document.cookie = "session_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        displayCookies();
+        document.getElementById('server-response').innerHTML = 'Cookie已清除';
+    }
+    
+    // 页面加载时显示cookie状态
+    displayCookies();
+</script>
+{% endblock %}

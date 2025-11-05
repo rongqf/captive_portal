@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}登录页面 - WiFi服务{% endblock %}
+{% block header_title %}欢迎使用WiFi服务{% endblock %}
+{% block header_subtitle %}安全、便捷的网络连接体验{% endblock %}
+
+{% block content %}
+<div style="text-align: center;">
+    <div class="info-box">
+        <h4 style="margin-top: 0; color: #333;">使用说明：</h4>
+        <ul style="margin: 0; padding-left: 20px; color: #555; text-align: left;">
+            <li>点击"登录"按钮开始使用网络</li>
+            <li>认证成功后即可畅享高速网络</li>
+            <li>如有问题请联系技术支持</li>
+        </ul>
+    </div>
+
+    <button class="btn" style="min-width: 200px;" onclick="window.location.href='{{ redirect_url }}'">
+        登录
+    </button>
+    <div style="margin: 30px 0; text-align: center;" onclick="reportAdClick('banner')">
+        <img src="/static/ads/banner.jpg" alt="广告"
+            style="max-width: 100%; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer;">
+    </div>
+</div>
+{% endblock %}

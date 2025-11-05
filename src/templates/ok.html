@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}认证成功 - WiFi服务{% endblock %}
+
+{% block header_title %}认证成功{% endblock %}
+{% block header_subtitle %}您已成功连接到网络{% endblock %}
+
+{% block content %}
+<div style="text-align: center;">
+    <div class="success-icon">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2">
+            <path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+    </div>
+    
+    <div style="margin: 30px 0;">
+        <h2 style="color: #4CAF50; margin-bottom: 15px;">连接成功！</h2>
+        <p style="font-size: 18px; color: #666; margin-bottom: 20px;">您已成功连接到网络</p>
+        <p class="small-text">您现在可以开始浏览互联网，享受高速网络体验</p>
+    </div>
+    
+    <a href="/" class="btn btn-secondary">返回首页</a>
+</div>
+{% endblock %}

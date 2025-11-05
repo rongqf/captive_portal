@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}强制门户{% endblock %}</title>
+
+    <!-- 公共样式 -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 200px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .info-box {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            text-align: left;
+        }
+
+        .success-icon {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .small-text {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                max-width: 100%;
+            }
+
+            .content {
+                padding: 15px;
+            }
+        }
+    </style>
+
+    <!-- 公共JavaScript -->
+    <script>
+        // 公共函数：广告点击上报
+        function reportAdClick(adId) {
+            fetch('/userbehavior/data/upload', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ad_id: adId,
+                    timestamp: new Date().toISOString(),
+                    page_url: window.location.href
+                })
+            }).catch(error => console.error('广告点击上报失败:', error));
+        }
+
+        // 公共函数：设备信息上报
+        function reportDeviceInfo() {
+            const deviceInfo = {
+                user_agent: navigator.userAgent,
+                platform: navigator.platform,
+                language: navigator.language,
+                screen_width: screen.width,
+                screen_height: screen.height,
+                timestamp: new Date().toISOString(),
+                page_url: window.location.href
+            };
+
+            fetch('/userbehavior/data/upload', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(deviceInfo)
+            }).catch(error => console.error('设备信息上报失败:', error));
+        }
+
+        // 页面加载时上报设备信息
+        document.addEventListener('DOMContentLoaded', function () {
+            reportDeviceInfo();
+        });
+    </script>
+
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>{% block header_title %}WiFi网络服务{% endblock %}</h1>
+            <p>{% block header_subtitle %}安全、便捷的网络连接体验{% endblock %}</p>
+        </header>
+
+        <main class="content">
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="footer">
+            <p>© 2024 网络服务提供商 版权所有</p>
+            <p>服务热线：400-123-4567 | 技术支持：support@example.com</p>
+        </footer>
+    </div>
+
+    {% block extra_scripts %}{% endblock %}
+</body>
+
+</html>
