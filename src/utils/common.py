@@ -9,10 +9,6 @@ from contextlib import contextmanager
 from utils.singleton import Singleton, SingletonMate
 
 
-from utils.rds import (
-    get_reload_info,
-    set_reload_info,
-)
 from configs import settings
 
 logger = logging.getLogger("common")

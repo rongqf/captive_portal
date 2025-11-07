@@ -5,7 +5,7 @@
 
 # 默认配置
 URL="http://192.168.50.242:8000/device/data/upload"
-GATE_NAME="23456789"
+GATE_NAME="OpenWrt openNDS"
 TYPE="user_list"
 
 # 获取ndsctl的JSON输出

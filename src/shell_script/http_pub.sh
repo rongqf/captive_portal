@@ -5,7 +5,7 @@
 
 # 默认配置
 URL="http://192.168.50.242:8000/device/data/upload"
-GATE_NAME="23456789"
+GATE_NAME="OpenWrt openNDS Window"
 TYPE="machine_info"
 
 # 发布机器特征到 MQTT

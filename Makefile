@@ -54,6 +54,16 @@ test:
 requirements:
 	uv pip freeze > src/requirements.txt
 
+
+.PHONY: db_git
+db_migrate:
+	cd src && python -m alembic revision --autogenerate -m 'init'
+
+.PHONY: db_up
+db_up:
+	cd src && python -m alembic upgrade head
+
+
 ## clean - clean build and test files
 .PHONY: clean
 clean:

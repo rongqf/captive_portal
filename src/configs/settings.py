@@ -10,9 +10,7 @@ PORT = 8000
 DEBUG = True
 
 
-DB_URI_OTC = 'postgresql+psycopg2://gh_otc_book:test@192.168.1.81:5432/gh_otc_book'
-RDS_URI_OTC = 'redis://:96OV6jqI7E7liGMIBVH@192.168.1.81:6379/'
-RDS_DB_OTC = 7
+DB_URI_OTC = 'postgresql+psycopg2://captive_portal:captive_portal@192.168.1.81:5432/captive_portal'
 
 
 from .site_settings import *
