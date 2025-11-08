@@ -1,10 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}登录页面 - WiFi服务{% endblock %}
-{% block header_title %}欢迎使用WiFi服务{% endblock %}
+
+{% block title %}登录页面 - King-WiFi服务{% endblock %}
+{% block header_title %}欢迎使用King-WiFi服务{% endblock %}
 {% block header_subtitle %}安全、便捷的网络连接体验{% endblock %}
 
+
+
+
 {% block content %}
+
+
 <div style="text-align: center;">
     <div class="info-box">
         <h4 style="margin-top: 0; color: #333;">使用说明：</h4>
@@ -15,12 +21,33 @@
         </ul>
     </div>
 
-    <button class="btn" style="min-width: 200px;" onclick="window.location.href='{{ redirect_url }}'">
+    <button class="btn" id="loginBtn" style="min-width: 200px; display:none" onclick="window.location.href='{{ redirect_url }}'">
         登录
-    </button>
-    <div style="margin: 30px 0; text-align: center;" onclick="reportAdClick('banner')">
+    </button> 
+    <button class="btn" style="min-width: 200px;" onclick="btn_click()">
+        登录
+    </button> 
+    <div style="margin: 30px 0; text-align: center;" onclick="reportAction('click_ad', {id:'banner'})">
         <img src="/static/ads/banner.jpg" alt="广告"
             style="max-width: 100%; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer;">
     </div>
 </div>
+
+
+<script>
+    function btn_click() {
+        reportAction('auth_click', {});
+        const loginButton = document.getElementById('loginBtn');
+        // loginButton.click(); // 这会触发登录按钮的 onclick 事件
+        const url= '{{ redirect_url|safe }}';
+        window.location.href = url;
+    };
+    // 页面加载时上报设备信息
+    document.addEventListener('DOMContentLoaded', function () {
+        reportAction('init_page', {});
+    });
+</script>
+
 {% endblock %}
+
+

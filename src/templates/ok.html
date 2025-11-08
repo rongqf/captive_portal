@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}认证成功 - WiFi服务{% endblock %}
+{% block title %}认证成功 - King-WiFi服务{% endblock %}
 
 {% block header_title %}认证成功{% endblock %}
 {% block header_subtitle %}您已成功连接到网络{% endblock %}
@@ -21,4 +21,12 @@
     
     <a href="/" class="btn btn-secondary">返回首页</a>
 </div>
+
+<script>
+    // 页面加载时上报设备信息
+    document.addEventListener('DOMContentLoaded', function () {
+        reportAction('auth_ok', {});
+    });
+</script>
+
 {% endblock %}

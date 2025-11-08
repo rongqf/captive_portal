@@ -9,7 +9,7 @@ from fastapi import applications
 from loguru import logger
 import uuid
 from fastapi.templating import Jinja2Templates
-
+ 
 from routers import auth_opennds
 from routers import device_data
 from routers import auth_wifidogx
@@ -26,6 +26,7 @@ app = FastAPI(
 origins = [
     "http://192.168.50.242:8000",  # 假设前端运行在 3000 端口
     "http://127.0.0.1:8001",  # 假设前端运行在 3000 端口
+    "http://106.53.56.43:8001",  # 假设前端运行在 3000 端口
 ]
 app.add_middleware(
     CORSMiddleware,

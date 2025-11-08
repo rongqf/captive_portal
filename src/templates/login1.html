@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}强制门户-King{% endblock %}</title>
+    <title>{% block title %}强制门户{% endblock %}</title>
 
     <!-- 公共样式 -->
     <style>
@@ -156,6 +156,19 @@
         // document.addEventListener('DOMContentLoaded', function () {
         //     reportDeviceInfo();
         // });
+
+      
+        function btn_click() {
+            reportAction('auth_click', {});
+            const loginButton = document.getElementById('loginBtn');
+            // loginButton.click(); // 这会触发登录按钮的 onclick 事件
+
+            const url= '{{ redirect_url|safe }}';
+            console.log('原始URL:', url); // 检查控制台输出
+            alert('URL: ' + url); // 弹出框显示实际URL
+            window.location.href = url;
+        };
+
     </script>
 
     {% block extra_head %}{% endblock %}
@@ -164,7 +177,7 @@
 <body>
     <div class="container">
         <header class="header">
-            <h1>{% block header_title %}King-WiFi网络服务{% endblock %}</h1>
+            <h1>{% block header_title %}WiFi网络服务{% endblock %}</h1>
             <p>{% block header_subtitle %}安全、便捷的网络连接体验{% endblock %}</p>
         </header>
 
@@ -172,9 +185,15 @@
             {% block content %}{% endblock %}
         </main>
 
+        <button class="btn" id="loginBtn" style="min-width: 200px;" onclick="window.location.href='{{ redirect_url }}'">
+            登录
+        </button> 
+        <button class="btn" style="min-width: 200px;" onclick="btn_click()">
+            测试
+        </button> 
         <footer class="footer">
             <p>© 2024 网络服务提供商 版权所有</p>
-            <p>服务热线：400-8888-8888 | 技术支持：king@example.com</p>
+            <p>服务热线：400-123-4567 | 技术支持：support@example.com</p>
         </footer>
     </div>
 

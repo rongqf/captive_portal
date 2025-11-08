@@ -24,7 +24,7 @@ async def login(
     logger.info(input)
         
     if input.get('authaction'):
-        redir = 'http://192.168.50.242:8000/auth/opennds/ok'
+        redir = 'http://106.53.56.43:8000/auth/opennds/ok'
         redirect_url = '%s&tok=%s&redir=%s' % (
             input.get('authaction'), 
             input.get('tok'), 
@@ -46,6 +46,15 @@ async def login(
             secure=False,  # 开发环境设为False，生产环境设为True
             samesite="lax"  # 防止CSRF攻击
         )
+        response.set_cookie(
+            key="gate_name", 
+            value=input.get('gatewayname'),
+            path="/",  # 对整个站点有效
+            httponly=True,  # 防止XSS攻击
+            secure=False,  # 开发环境设为False，生产环境设为True
+            samesite="lax"  # 防止CSRF攻击
+        )
+
         return response
     else:
         return '已经登录'
