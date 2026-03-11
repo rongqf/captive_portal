@@ -34,31 +34,7 @@ uv venv --python 3.11
 uv sync --frozen
 ```
 
-## 4. Configure application settings
-
-Edit `src/configs/site_settings.py` on the server:
-
-```bash
-nano /opt/captive_portal/src/configs/site_settings.py
-```
-
-Recommended production content:
-
-```python
-APP_HOST = "0.0.0.0"
-PORT = 8000
-DEBUG = False
-DB_URI_OTC = "postgresql+psycopg2://USER:PASSWORD@DB_HOST:5432/captive_portal"
-```
-
-## 5. Run database migrations
-
-```bash
-cd /opt/captive_portal/src
-../.venv/bin/python -m alembic upgrade head
-```
-
-## 6. Install the systemd service
+## 4. Install the systemd service
 
 The provided unit file assumes the project path is `/opt/captive_portal` and the Linux user is `ubuntu`.
 
@@ -78,7 +54,7 @@ View logs:
 sudo journalctl -u captive-portal -f
 ```
 
-## 7. Install the nginx config
+## 5. Install the nginx config
 
 ```bash
 sudo cp /opt/captive_portal/deploy/nginx/captive-portal.conf /etc/nginx/sites-available/captive-portal
@@ -87,7 +63,7 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-## 8. Open firewall ports
+## 6. Open firewall ports
 
 If `ufw` is enabled:
 
@@ -96,7 +72,7 @@ sudo ufw allow 80/tcp
 sudo ufw allow 443/tcp
 ```
 
-## 9. Optional: enable HTTPS
+## 7. Optional: enable HTTPS
 
 If you have a domain name already pointing to the server:
 
@@ -107,8 +83,6 @@ sudo certbot --nginx -d <your-domain>
 
 ## Notes
 
-- Runtime settings are loaded from `src/configs/site_settings.py`.
-- `APP_HOST`, `PORT`, `DEBUG`, and `DB_URI_OTC` can all be configured there.
 - Python 3.11 and the `.venv` directory are both managed by `uv`.
 - The service still starts `/opt/captive_portal/.venv/bin/python`, but that interpreter comes from the `uv`-managed virtual environment.
 - If you want, this can also be packaged into a `Dockerfile` and `docker-compose.yml`.
