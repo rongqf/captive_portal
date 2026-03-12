@@ -70,7 +70,7 @@ class UserBehavior(DbBase):
     device = Column(String(), comment="device")
     
     action = Column(String(), comment="action")
-    action_data = Column(String(), comment="action_data")
+    action_data = Column(JSONB, comment="action_data")
     create_time = Column(DateTime(timezone=True), comment="创建时间")
     
     __table_args__ = (
