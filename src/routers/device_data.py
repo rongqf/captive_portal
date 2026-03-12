@@ -21,11 +21,14 @@ def process_device_data(data: dict):
     gatename = data['gate_name']
     msgtype = data['type']
     time = pd.to_datetime(data['timestamp'])
+    current_time = datetime.now()
     
     logger.info(f"处理设备数据: {data['data']}")
     df = pd.DataFrame([data['data']])
     logger.info(f"处理设备数据: {df}")
     df['gatewayname'] = gatename
+    df['create_time'] = current_time
+    df['update_time'] = current_time
     del df['time']
     del df['os']
     del df['dhcp_lease_time']

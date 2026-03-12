@@ -45,8 +45,8 @@ class Device(DbBase):
     mem_usage_percent = Column(String(), comment="mem_usage_percent")
     ip = Column(String(), comment="ip")
     status = Column(String(), comment="status")
-    create_time = Column(DateTime(timezone=True), comment="创建时间")
-    update_time = Column(DateTime(timezone=True), comment="更新时间")
+    create_time = Column(DateTime(timezone=True), server_default=func.now(), comment="创建时间")
+    update_time = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), comment="更新时间")
     
     __table_args__ = (
         Index('device_idx1', 'gatewayname'),
