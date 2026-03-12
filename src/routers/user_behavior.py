@@ -18,9 +18,10 @@ def process_user_data(session_id, gate_name, user_agent_info, data):
     data['gatewayname'] = gate_name
     data['create_time'] = datetime.now()
     data['action'] = data.get('action')
-    data['action_data'] = data.get('actionData')
+    data['action_data'] = data.get('action_data')
 
     df = pd.DataFrame([data])
+    logger.info(f"处理用户行为数据: {df}")
     df_to_sql(df, 'user_behavior')
 
     pass
