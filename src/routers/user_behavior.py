@@ -7,6 +7,7 @@ from datetime import datetime
 from dependencies.user_agent import get_user_agent_info
 import pandas as pd 
 import numpy as np
+import json
 from utils.pd import df_to_sql
 
 router = APIRouter(prefix='/userbehavior/data')
@@ -18,7 +19,7 @@ def process_user_data(session_id, gate_name, user_agent_info, user_data):
     data['gatewayname'] = gate_name
     data['create_time'] = datetime.now()
     data['action'] = user_data.get('action')
-    data['action_data'] = user_data.get('action_data')
+    data['action_data'] = json.dumps(user_data.get('action_data'))
 
     df = pd.DataFrame([data])
     logger.info(f"处理用户行为数据: {data}")
