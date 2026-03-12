@@ -5,6 +5,7 @@ from fastapi.templating import Jinja2Templates
 import os
 from loguru import logger
 import uuid
+from configs import settings
 
 router = APIRouter(
     prefix='/auth/opennds',
@@ -24,7 +25,7 @@ async def login(
     logger.info(input)
         
     if input.get('authaction'):
-        redir = 'http://106.53.56.43:8000/auth/opennds/ok'
+        redir = settings.OPENNDS_OK_URL
         redirect_url = '%s&tok=%s&redir=%s' % (
             input.get('authaction'), 
             input.get('tok'), 

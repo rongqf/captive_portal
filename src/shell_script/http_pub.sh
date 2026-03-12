@@ -4,7 +4,7 @@
 # MQTT 发布脚本 - 上报机器特征（IP、时间、MAC、主机名、DHCP、主板、硬盘等）
 
 # 默认配置
-URL="http://192.168.50.242:8000/device/data/upload"
+URL="http://115.190.191.173:8000/device/data/upload"
 GATE_NAME="OpenWrt openNDS Window"
 TYPE="machine_info"
 
