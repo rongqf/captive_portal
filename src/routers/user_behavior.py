@@ -21,7 +21,7 @@ def process_user_data(session_id, gate_name, user_agent_info, data):
     data['action_data'] = data.get('action_data')
 
     df = pd.DataFrame([data])
-    logger.info(f"处理用户行为数据: {df}")
+    logger.info(f"处理用户行为数据: {data}")
     df_to_sql(df, 'user_behavior')
 
     pass
