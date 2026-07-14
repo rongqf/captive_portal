@@ -7,6 +7,7 @@ from datetime import datetime
 from loguru import logger
 from dependencies.user_agent import get_basic_user_agent_info
 import uuid
+from configs import settings
 
 router = APIRouter(
     prefix='/auth/wifidogx',
@@ -86,8 +87,9 @@ async def auth(
 @router.get("/portal/")
 async def ok(request: Request):
     return templates.TemplateResponse(
-        request=request, 
-        name="ok.html"
+        request=request,
+        name="ok.html",
+        context={"browser_url": settings.POST_AUTH_BROWSER_URL},
     )
     
 @router.get("/ping/")

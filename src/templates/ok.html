@@ -19,13 +19,46 @@
         <p class="small-text">您现在可以开始浏览互联网，享受高速网络体验</p>
     </div>
     
-    <a href="/" class="btn btn-secondary">返回首页</a>
+    {% if browser_url %}
+    <a id="openBrowserLink" href="{{ browser_url }}" class="btn" target="_blank" rel="noopener">在浏览器中打开</a>
+    {% endif %}
 </div>
 
 <script>
-    // 页面加载时上报设备信息
+    function openInDefaultBrowser(url) {
+        var ua = navigator.userAgent || '';
+        try {
+            if (/Android/i.test(ua)) {
+                // Captive portal WebView 里直接 location=http(s) 仍停在系统小窗；
+                // intent:// + scheme=http|https 是 Android 跳出到默认浏览器的常用做法。
+                var u = new URL(url);
+                var authority = u.hostname + (u.port ? (':' + u.port) : '');
+                var pathAndQuery = u.pathname + u.search + u.hash;
+                var intent = 'intent://' + authority + pathAndQuery +
+                    '#Intent;scheme=' + u.protocol.replace(':', '') +
+                    ';action=android.intent.action.VIEW' +
+                    ';category=android.intent.category.BROWSABLE' +
+                    ';S.browser_fallback_url=' + encodeURIComponent(url) +
+                    ';end';
+                window.location.href = intent;
+                return;
+            }
+            if (/iPhone|iPad|iPod/i.test(ua)) {
+                var safariUrl = url
+                    .replace(/^https:\/\//i, 'x-safari-https://')
+                    .replace(/^http:\/\//i, 'x-safari-http://');
+                window.location.href = safariUrl;
+                return;
+            }
+        } catch (e) {}
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         reportAction('auth_ok', {});
+        var url = '{{ browser_url|default("", true)|safe }}';
+        if (url) {
+            openInDefaultBrowser(url);
+        }
     });
 </script>
 

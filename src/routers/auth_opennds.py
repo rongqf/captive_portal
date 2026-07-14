@@ -64,6 +64,7 @@ async def login(
 @router.get("/ok")
 async def ok(request: Request):
     return templates.TemplateResponse(
-        request=request, 
-        name="ok.html"
+        request=request,
+        name="ok.html",
+        context={"browser_url": settings.POST_AUTH_BROWSER_URL},
     )
