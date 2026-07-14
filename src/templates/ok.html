@@ -24,53 +24,26 @@
     {% endif %}
 
     <p id="browserEscapeHint" style="margin-top: 24px; font-size: 13px; color: #888; line-height: 1.5;">
-        版本标识：认证成功后唤起默认浏览器（post-auth-open-default-browser）
+        版本标识：认证成功页兜底（优先应在登录点击时已自动打开）
         {% if browser_url %}
         <br>落地页已配置：{{ browser_url }}
         {% else %}
-        <br>落地页未配置（POST_AUTH_BROWSER_URL 为空，不会自动跳转）
+        <br>落地页未配置（POST_AUTH_BROWSER_URL 为空）
         {% endif %}
     </p>
 </div>
 
 <script>
-    function openInDefaultBrowser(url) {
-        var ua = navigator.userAgent || '';
-        try {
-            if (/Android/i.test(ua)) {
-                // Captive portal WebView 里直接 location=http(s) 仍停在系统小窗；
-                // intent:// + scheme=http|https 是 Android 跳出到默认浏览器的常用做法。
-                var u = new URL(url);
-                var authority = u.hostname + (u.port ? (':' + u.port) : '');
-                var pathAndQuery = u.pathname + u.search + u.hash;
-                var intent = 'intent://' + authority + pathAndQuery +
-                    '#Intent;scheme=' + u.protocol.replace(':', '') +
-                    ';action=android.intent.action.VIEW' +
-                    ';category=android.intent.category.BROWSABLE' +
-                    ';S.browser_fallback_url=' + encodeURIComponent(url) +
-                    ';end';
-                window.location.href = intent;
-                return;
-            }
-            if (/iPhone|iPad|iPod/i.test(ua)) {
-                var safariUrl = url
-                    .replace(/^https:\/\//i, 'x-safari-https://')
-                    .replace(/^http:\/\//i, 'x-safari-http://');
-                window.location.href = safariUrl;
-                return;
-            }
-        } catch (e) {}
-    }
-
     document.addEventListener('DOMContentLoaded', function () {
         reportAction('auth_ok', {});
         var url = '{{ browser_url|default("", true)|safe }}';
         var hint = document.getElementById('browserEscapeHint');
         var ua = navigator.userAgent || '';
-        var path = /Android/i.test(ua) ? 'Android intent' : (/iPhone|iPad|iPod/i.test(ua) ? 'iOS x-safari' : '非手机 UA，未自动唤起');
+        var path = /Android/i.test(ua) ? 'Android' : (/iPhone|iPad|iPod/i.test(ua) ? 'iOS' : '非手机 UA');
         if (hint) {
-            hint.innerHTML += '<br>当前唤起路径：' + path;
+            hint.innerHTML += '<br>设备：' + path;
         }
+        // 成功页自动唤起常被系统拦截；保留尝试，失败时用上方按钮
         if (url) {
             openInDefaultBrowser(url);
         }

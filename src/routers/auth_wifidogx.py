@@ -41,7 +41,10 @@ async def login(
     response = templates.TemplateResponse(
         request=request, 
         name="login.html", 
-        context={"redirect_url": redirect_url}
+        context={
+            "redirect_url": redirect_url,
+            "browser_url": settings.POST_AUTH_BROWSER_URL,
+        }
     )
     session_token = f"session_{uuid.uuid4()}"
     response.set_cookie(

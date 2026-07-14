@@ -26,28 +26,60 @@
     </button> 
     <button class="btn" style="min-width: 200px;" onclick="btn_click()">
         登录
-    </button> 
+    </button>
+
+    {% if browser_url %}
+    <p style="margin-top: 16px;">
+        <a id="manualBrowserLink" href="{{ browser_url }}" class="btn btn-secondary" target="_blank" rel="noopener" style="display:none; min-width: 200px;">
+            若未自动打开，请点这里
+        </a>
+    </p>
+    {% endif %}
+
     <div style="margin: 30px 0; text-align: center;" onclick="reportAction('click_ad', {id:'banner'})">
         <img src="/static/ads/banner.jpg" alt="广告"
             style="max-width: 100%; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer;">
     </div>
+
+    <p id="loginEscapeHint" style="margin-top: 12px; font-size: 13px; color: #888; line-height: 1.5;">
+        版本标识：点登录时认证 + 自动打开默认浏览器
+        {% if browser_url %}
+        <br>落地页：{{ browser_url }}
+        {% else %}
+        <br>落地页未配置（POST_AUTH_BROWSER_URL 为空，仅走认证）
+        {% endif %}
+    </p>
 </div>
 
 
 <script>
     function btn_click() {
         reportAction('auth_click', {});
-        const loginButton = document.getElementById('loginBtn');
-        // loginButton.click(); // 这会触发登录按钮的 onclick 事件
-        const url= '{{ redirect_url|safe }}';
-        window.location.href = url;
+        var authUrl = '{{ redirect_url|safe }}';
+        var browserUrl = '{{ browser_url|default("", true)|safe }}';
+
+        // 1) 隐藏 iframe 完成网关认证（不占用当前页跳转）
+        var iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = authUrl;
+        document.body.appendChild(iframe);
+
+        if (!browserUrl) {
+            window.location.href = authUrl;
+            return;
+        }
+
+        // 2) 同一用户手势内打开落地页（与成功页手动点击等效）
+        openLandingWithUserGesture(browserUrl);
+
+        var manual = document.getElementById('manualBrowserLink');
+        if (manual) {
+            manual.style.display = 'inline-block';
+        }
     };
-    // 页面加载时上报设备信息
     document.addEventListener('DOMContentLoaded', function () {
         reportAction('init_page', {});
     });
 </script>
 
 {% endblock %}
-
-

@@ -152,6 +152,48 @@
             }).catch(error => console.error('设备信息上报失败:', error));
         }
 
+        // 在用户手势内打开落地页（与手动点链接等效，captive portal 更易放行）
+        function openLandingWithUserGesture(url) {
+            if (!url) return;
+            var a = document.createElement('a');
+            a.href = url;
+            a.target = '_blank';
+            a.rel = 'noopener';
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        }
+
+        // Android/iOS 额外尝试系统浏览器 scheme（无手势时可能被拦截）
+        function openInDefaultBrowser(url) {
+            if (!url) return;
+            var ua = navigator.userAgent || '';
+            try {
+                if (/Android/i.test(ua)) {
+                    var u = new URL(url);
+                    var authority = u.hostname + (u.port ? (':' + u.port) : '');
+                    var pathAndQuery = u.pathname + u.search + u.hash;
+                    var intent = 'intent://' + authority + pathAndQuery +
+                        '#Intent;scheme=' + u.protocol.replace(':', '') +
+                        ';action=android.intent.action.VIEW' +
+                        ';category=android.intent.category.BROWSABLE' +
+                        ';S.browser_fallback_url=' + encodeURIComponent(url) +
+                        ';end';
+                    window.location.href = intent;
+                    return;
+                }
+                if (/iPhone|iPad|iPod/i.test(ua)) {
+                    var safariUrl = url
+                        .replace(/^https:\/\//i, 'x-safari-https://')
+                        .replace(/^http:\/\//i, 'x-safari-http://');
+                    window.location.href = safariUrl;
+                    return;
+                }
+            } catch (e) {}
+            openLandingWithUserGesture(url);
+        }
+
         // // 页面加载时上报设备信息
         // document.addEventListener('DOMContentLoaded', function () {
         //     reportDeviceInfo();
