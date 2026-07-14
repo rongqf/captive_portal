@@ -22,6 +22,15 @@
     {% if browser_url %}
     <a id="openBrowserLink" href="{{ browser_url }}" class="btn" target="_blank" rel="noopener">在浏览器中打开</a>
     {% endif %}
+
+    <p id="browserEscapeHint" style="margin-top: 24px; font-size: 13px; color: #888; line-height: 1.5;">
+        版本标识：认证成功后唤起默认浏览器（post-auth-open-default-browser）
+        {% if browser_url %}
+        <br>落地页已配置：{{ browser_url }}
+        {% else %}
+        <br>落地页未配置（POST_AUTH_BROWSER_URL 为空，不会自动跳转）
+        {% endif %}
+    </p>
 </div>
 
 <script>
@@ -56,6 +65,12 @@
     document.addEventListener('DOMContentLoaded', function () {
         reportAction('auth_ok', {});
         var url = '{{ browser_url|default("", true)|safe }}';
+        var hint = document.getElementById('browserEscapeHint');
+        var ua = navigator.userAgent || '';
+        var path = /Android/i.test(ua) ? 'Android intent' : (/iPhone|iPad|iPod/i.test(ua) ? 'iOS x-safari' : '非手机 UA，未自动唤起');
+        if (hint) {
+            hint.innerHTML += '<br>当前唤起路径：' + path;
+        }
         if (url) {
             openInDefaultBrowser(url);
         }
